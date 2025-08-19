@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SocialNet | Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      --primary-color: #1877F2;
+      --secondary-color: #145dbf;
+      --bg-light: #f0f2f5;
+      --card-bg: #ffffff;
+      --text-dark: #333;
+      --text-muted: #666;
+      --border-radius: 10px;
+      --transition-speed: 0.3s;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    header.navbar {
+      background-color: var(--primary-color);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .navbar h1 {
+      font-size: 1.8em;
+      margin: 0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition-speed);
+    }
+
+    .nav-links a:hover {
+      color: #e4e6eb;
+    }
+
+    .search-bar input {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 0.95em;
+    }
+
+    main.main-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 24px;
+      padding: 40px 24px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .card h2 {
+      color: var(--primary-color);
+      margin-bottom: 16px;
+      font-size: 1.4em;
+    }
+
+    .card p, .card ul {
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+
+    .card button {
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 10px;
+      transition: background-color var(--transition-speed);
+    }
+
+    .card button:hover {
+      background-color: var(--secondary-color);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #fff;
+      color: var(--text-muted);
+      font-size: 0.9em;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 900px) {
+      main.main-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .story-title a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .story-title a:hover {
+      text-decoration: underline;
+    }
+
+    .post-image {
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .post-actions button {
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar" role="banner">
+    <h1>SocialNet</h1>
+    <nav aria-label="Main Navigation">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="messages.html">Messages</a></li>
+        <li><a href="friends.html">Friends</a></li>
+        <li><a href="login.html">Logout</a></li>
+      </ul>
+    </nav>
+    <div class="search-bar">
+      <input type="text" placeholder="Search..." aria-label="Search" />
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Profile Sidebar -->
+    <aside class="card" id="profile-card">
+      <h2>Your Profile</h2>
+      <p><strong>Name:</strong> <span id="user-name">Loading...</span></p>
+      <p><strong>Email:</strong> <span id="user-email">Loading...</span></p>
+      <button onclick="location.href='edit-profile.html'">Edit Profile</button>
+    </aside>
+
+    <!-- News Feed -->
+    <section class="card">
+      <h2>News Feed</h2>
+      <div id="feed"></div>
+    </section>
+
+    <!-- Right Sidebar -->
+    <aside>
+      <div class="card">
+        <h2>Messages</h2>
+        <p>You have no new messages.</p>
+        <button onclick="location.href='new-message.html'">Send Message</button>
+      </div>
+
+      <div class="card">
+        <h2>Your Friends</h2>
+        <ul>
+          <li>Friend 1 <button onclick="location.href='friend1.html'">View</button></li>
+          <li>Friend 2 <button onclick="location.href='friend2.html'">View</button></li>
+          <li>Friend 3 <button onclick="location.href='friend3.html'">View</button></li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 SocialNet. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    const currentUser = {
+      name: "Jane Smith",
+      email: "jane.smith@example.com"
+    };
+    document.getElementById("user-name").textContent = currentUser.name;
+    document.getElementById("user-email").textContent = currentUser.email;
+
+    const autoPosts = [
+      "Just finished a great book 📚",
+      "Coffee is life ☕",
+      "Exploring the city today 🏙️",
+      "Feeling grateful 🙏",
+      "Throwback to last summer 🌊",
+      "New recipe turned out amazing 🍝"
+    ];
+
+    function generateRandomPost() {
+      const feed = document.getElementById('feed');
+      const article = document.createElement('article');
+      const randomText = autoPosts[Math.floor(Math.random() * autoPosts.length)];
+      const timestamp = new Date().toLocaleTimeString();
+
+      article.innerHTML = `
+        <h3>Auto Post</h3>
+        <small style="color:#666;">${timestamp}</small>
+        <p>${randomText}</p>
+        <button>Like</button>
+        <button>Comment</button>
+      `;
+      feed.appendChild(article);
+      feed.scrollTop = feed.scrollHeight;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setInterval(generateRandomPost, 15000);
+    });
+
+    // News Feed Logic
+    const NEWS_API_KEY = '3d6f9c906f3f4f8fba99a2c5e8e2a296';
+    const NEWS_API_URL = `https://newsapi.org/v2/top-headlines?country=gb&q=scotland&pageSize=10&apiKey=${NEWS_API_KEY}`;
+
+    async function fetchScottishNews() {
+      try {
+        const res = await fetch(NEWS_API_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const { articles } = await res.json();
+        return articles;
+      } catch (err) {
+        console.error('Failed to load news:', err);
+        return [];

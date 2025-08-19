@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SocialHub Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-wrapper {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+      max-width: 1000px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .welcome-section {
+      max-width: 400px;
+    }
+
+    .welcome-section h1 {
+      font-size: 3rem;
+      color: #1877F2;
+      margin-bottom: 10px;
+    }
+
+    .welcome-section p {
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .auth-container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+
+    .auth-container h2 {
+      margin-bottom: 1rem;
+      text-align: center;
+      color: #1877F2;
+    }
+
+    .auth-container input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .auth-container button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #1877F2;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .auth-container button:hover {
+      background-color: #145dbf;
+    }
+
+    .auth-container p {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .auth-container a {
+      color: #1877F2;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    #profilePicInput {
+      display: none;
+    }
+
+    #signupFields {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .login-wrapper {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .welcome-section {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="welcome-section">
+      <h1>SocialHub</h1>
+      <p>Connect with friends and the world around you on SocialHub.</p>
+    </div>
+
+    <div class="auth-container">
+      <h2 id="formTitle">Log In to SocialHub</h2>
+
+      <!-- Shared Fields -->
+      <input type="text" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+
+      <!-- Sign-Up Only Fields -->
+      <div id="signupFields">
+        <input type="text" id="name" placeholder="Full Name" />
+        <input type="text" id="username" placeholder="Username" />
+        <input type="file" id="profilePicInput" accept="image/*" />
+        <label for="profilePicInput" style="cursor:pointer; color:#1877F2;">Upload Profile Picture</label>
+      </div>
+
+      <button onclick="handleAuth()">Log In</button>
+      <p><a onclick="toggleForm()">Create New Account</a></p>
+    </div>
+  </div>
+
+  <script>
+    let isSignup = false;
+
+    function toggleForm() {
+      isSignup = !isSignup;
+      document.getElementById('formTitle').textContent = isSignup ? "Create Your SocialHub Account" : "Log In to SocialHub";
+      document.querySelector('button').textContent = isSignup ? "Sign Up" : "Log In";
+      document.getElementById('signupFields').style.display = isSignup ? "block" : "none";
+    }
+
+    function handleAuth() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (isSignup) {
+        const name = document.getElementById('name').value.trim();
+        const username = document.getElementById('username').value.trim();
+        const picFile = document.getElementById('profilePicInput').files[0];
+
+        if (!name || !email || !username || !password) {
+          alert("Please fill out all fields.");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const profilePic = picFile ? e.target.result : null;
+          const user = { name, email, username, password, profilePic };
+          localStorage.setItem(`user_${username}`, JSON.stringify(user));
+          localStorage.setItem('currentUser', username);
+          window.location.href = `profile.html?user=${username}`;
+        };
+
+        if (picFile) {
+          reader.readAsDataURL(picFile);
+        } else {
+          const user = { name, email, username, password, profilePic: null };
+          localStorage.setItem(`user_${username}`, JSON.stringify(user));
+          localStorage.setItem('currentUser', username);
+          window.location.href = `profile.html?user=${username}`;
+        }
+
+      } else {
+        const users = Object.keys(localStorage).filter(key => key.startsWith('user_'));
+        const matchedUser = users.map(key => JSON.parse(localStorage.getItem(key)))
+                                 .find(user => user.email === email && user.password === password);
+
+        if (matchedUser) {
+          localStorage.setItem('currentUser', matchedUser.username);
+          window.location.href = `profile.html?user=${matchedUser.username}`;
+        } else {
+          alert("Invalid email or password.");
+        }
+      }
+    }
+
+    
+  </script>
+
+  <script>
+  // Try to get the user info from localStorage
+  const storedUser = localStorage.getItem('currentUser');
+  
+  if (storedUser) {
+    const user = JSON.parse(storedUser);
+
+    // Fill in the profile header section
+    document.querySelectorAll('#userName').forEach(el => el.textContent = user.name);
+    document.querySelectorAll('#userEmail').forEach(el => el.textContent = user.email);
+    document.querySelectorAll('#userBio').forEach(el => el.textContent = user.bio || '');
+  } else {
+    // If no user info is found, send them to login
+    window.location.href = 'login.html';
+  }
+
+
+
+  // Load current user from localStorage
+const currentUsername = localStorage.getItem('currentUser');
+if (!currentUsername) {
+  window.location.href = 'login.html'; // Redirect if not logged in
+} else {
+  const user = JSON.parse(localStorage.getItem(`user_${currentUsername}`));
+  if (user) {
+    // Populate profile info if elements exist
+    const nameEl = document.getElementById('user-name') || document.getElementById('profileName');
+    const emailEl = document.getElementById('user-email');
+    const bioEl = document.getElementById('profileBio');
+    const avatarEl = document.getElementById('user-avatar');
+
+    if (nameEl) nameEl.textContent = user.name || user.username;
+    if (emailEl) emailEl.textContent = user.email;
+    if (bioEl) bioEl.value = user.bio || '';
+    if (avatarEl) avatarEl.src = user.profilePic || 'https://via.placeholder.com/50';
+  }
+}
+
+</script>
+
+</body>
+</html>
